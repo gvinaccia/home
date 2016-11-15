@@ -50,7 +50,11 @@ io.on('connection', function (socket) {
   socket.on('command', function (command) {
     switch (command.name) {
       case 'toggle':
-        arduino.toggle();
+        if(lastData.status == 1) {
+          arduino.turnOff();
+        } else {
+          arduino.turnOn();
+        }
         break;
       case 'incr':
         arduino.setTargetTemp(lastData.target + .5);
