@@ -8,7 +8,7 @@ class Arduino extends EventEmitter {
 
         this.baudRate = baudRate;
         this.isConnected = false;
-        this.logger = new winston.logger({
+        this.logger = new winston.Logger({
             level: 'info',
             transports: [
                 new (winston.transports.File)({ filename: 'casa.log' })
