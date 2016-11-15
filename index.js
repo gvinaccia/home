@@ -9,7 +9,6 @@ const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database('app.db');
 const Arduino = require('./src/arduino');
 
-
 const history = new Queue(2000);
 
 var lastData = {};
@@ -31,9 +30,21 @@ arduino.connect();
 
 app.use(express.static('public'));
 
-//cron.schedule('*/5 * * * * *', function() {
-//    port.write('t');   
-//})
+cron.schedule('30 7 * * *', () => {
+  arduino.turnOn();
+});
+
+cron.schedule('15 8 * * *', () => {
+  arduino.turnOff();
+});
+
+cron.schedule('0 18 * * *', () => {
+  arduino.turnOn();
+});
+
+cron.schedule('30 19 * * *', () => {
+  arduino.turnOff();
+});
 
 io.on('connection', function (socket) {
   socket.on('command', function (command) {
