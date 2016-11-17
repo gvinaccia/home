@@ -52,6 +52,10 @@ if (shouldSchedule) {
 
 }
 
+cron.schedule('*/5 * * * *', () => {
+  arduino.logger.log('info', 'data', lastData);
+})
+
 
 io.on('connection', function (socket) {
   socket.on('command', function (command) {
