@@ -8,6 +8,8 @@ const Queue = require("./queue");
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database('app.db');
 const Arduino = require('./src/arduino');
+const winston = require('winston');
+
 
 const shouldSchedule = false;
 
@@ -15,7 +17,14 @@ const history = new Queue(2000);
 
 var lastData = {};
 
-const arduino = new Arduino;
+const logger = new winston.Logger({
+  level: 'info',
+  transports: [
+    new (winston.transports.File)({ filename: 'casa.log' })
+  ]
+});
+
+const arduino = new Arduino(logger);
 
 arduino.on('error', (err) => {
   console.log(err);
@@ -53,7 +62,7 @@ if (shouldSchedule) {
 }
 
 cron.schedule('*/5 * * * *', () => {
-  arduino.logger.log('info', 'data', lastData);
+  logger.log('info', 'data', lastData);
 })
 
 

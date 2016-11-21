@@ -1,19 +1,13 @@
 const EventEmitter = require('events');
 const SerialPort = require('serialport');
-const winston = require('winston');
 
 class Arduino extends EventEmitter {
-    constructor(baudRate = 57600) {
+    constructor(logger, baudRate = 57600) {
         super();
 
         this.baudRate = baudRate;
         this.isConnected = false;
-        this.logger = new winston.Logger({
-            level: 'info',
-            transports: [
-                new (winston.transports.File)({ filename: 'casa.log' })
-            ]
-        })
+        this.logger = logger;
     }
 
     connect() {
