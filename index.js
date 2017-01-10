@@ -43,14 +43,14 @@ app.use(express.static('public'));
 
 if (shouldSchedule) {
 
-  cron.schedule('30 7 * * *', () => {
+  cron.schedule('30 6 * * *', () => {
     arduino.turnOn();
   });
 
-  cron.schedule('15 8 * * *', () => {
+  cron.schedule('45 7 * * *', () => {
     arduino.turnOff();
   });
-
+/*
   cron.schedule('0 18 * * *', () => {
     arduino.turnOn();
   });
@@ -58,6 +58,7 @@ if (shouldSchedule) {
   cron.schedule('30 19 * * *', () => {
     arduino.turnOff();
   });
+  */
 
 }
 
