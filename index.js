@@ -11,7 +11,7 @@ const Arduino = require('./src/arduino');
 const winston = require('winston');
 
 
-const shouldSchedule = false;
+const shouldSchedule = true;
 
 const history = new Queue(2000);
 
