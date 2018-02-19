@@ -18,8 +18,8 @@ let lock = false;
 socket.on('datapkg', function (msg) {
     const receivedData = JSON.parse(msg);
     $status.innerHTML = (receivedData.status ? 'ON' : 'OFF');
-    $status2.innerHTML = receivedData.remainingTime > 0 ? receivedData.remainingTime + ' min' : '';
-    $status3.innerHTML = receivedData.schedule ? 'scheduled' : 'manual';
+    $status2.innerHTML = receivedData.remainingTime > 0 ? receivedData.remainingTime + ' min' : '---';
+    $status3.innerHTML = receivedData.schedule ? 'avvio programmato attivo' : 'nessun avvio programmato';
     $temp1.innerHTML = (receivedData.temp1.toFixed(2));
     $temp2.innerHTML = (receivedData.temp2.toFixed(2));
     $target.innerHTML = (receivedData.target.toFixed(2));
