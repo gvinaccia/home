@@ -79,7 +79,7 @@ io.on('connection', function (socket) {
         arduino.setTargetTemp(lastData.target - .5);
         break;
       case 'start1':
-        startCycle(60);
+        startCycle(2);
         break;
       case 'start2':
         startCycle(120);
@@ -110,6 +110,7 @@ function stopCycle() {
 
   clearTimeout(timeoutRef);
   clearInterval(intervalRef);
+  remainingTime = 0;
   arduino.turnOff();
 }
 

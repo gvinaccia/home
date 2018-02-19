@@ -26,6 +26,7 @@ socket.on('datapkg', function (msg) {
     $toggleBtn.innerHTML = (receivedData.status ? 'Spegni' : 'Accendi');
 
     lock = false;
+    console.log(receivedData);
 });
 
 $toggleBtn.addEventListener('click', _ => {
