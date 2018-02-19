@@ -33,8 +33,9 @@ arduino.on('error', console.log);
 arduino.on('data', (data) => {
   try {
     lastData = JSON.parse(data);
-    data.remainingTime = remainingTime;
-    io.emit('datapkg', data);
+    const d = JSON.parse(data);
+    d.remainingTime = remainingTime;
+    io.emit('datapkg', JSON.stringify(d));
   } catch (e) { }
 })
 
