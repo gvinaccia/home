@@ -11,7 +11,7 @@ const Arduino = require('./src/arduino');
 const winston = require('winston');
 
 
-const shouldSchedule = false;
+let shouldSchedule = false;
 
 const history = new Queue(2000);
 
@@ -35,6 +35,7 @@ arduino.on('data', (data) => {
     lastData = JSON.parse(data);
     const d = JSON.parse(data);
     d.remainingTime = remainingTime;
+    d.schedule = shouldSchedule;
     io.emit('datapkg', JSON.stringify(d));
   } catch (e) { }
 })
@@ -43,17 +44,15 @@ arduino.connect();
 
 app.use(express.static('public'));
 
-if (shouldSchedule) {
-
-  cron.schedule('30 6 * * *', () => {
+cron.schedule('30 6 * * *', () => {
+  if (shouldSchedule) {
     arduino.turnOn();
-  });
+  }
+});
 
-  cron.schedule('45 7 * * *', () => {
-    arduino.turnOff();
-  });
-
-}
+cron.schedule('45 7 * * *', () => {
+  arduino.turnOff();
+});
 
 cron.schedule('*/5 * * * *', () => {
   logger.log('info', 'data', lastData);
@@ -68,7 +67,7 @@ io.on('connection', function (socket) {
     switch (command.name) {
       case 'toggle':
         if (lastData.status == 1) {
-          arduino.turnOff();
+          stopCycle();
         } else {
           arduino.turnOn();
         }
@@ -80,13 +79,16 @@ io.on('connection', function (socket) {
         arduino.setTargetTemp(lastData.target - .5);
         break;
       case 'start1':
-        startCycle(2);
+        startCycle(60);
         break;
       case 'start2':
         startCycle(120);
         break;
-      case 'stopAll':
-        stopCycle();
+      case 'start2':
+        startCycle(120);
+        break;
+      case 's_toggle':
+        shouldSchedule = !shouldSchedule;
         break;
     }
   });
@@ -101,18 +103,19 @@ function startCycle(time) {
   }, 60 * 1000);
   timeoutRef = setTimeout(() => {
     stopCycle();
-  }, time * 60 * 1000) 
+  }, time * 60 * 1000)
 }
 
 function stopCycle() {
-  if (! timeoutRef) {
+  arduino.turnOff();
+
+  if (!timeoutRef) {
     return;
   }
 
   clearTimeout(timeoutRef);
   clearInterval(intervalRef);
   remainingTime = 0;
-  arduino.turnOff();
 }
 
 http.listen(3000, "0.0.0.0", function () {

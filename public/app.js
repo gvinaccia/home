@@ -1,6 +1,8 @@
 const socket = io();
 
 const $status = document.getElementById('status');
+const $status2 = document.getElementById('status2');
+const $status3 = document.getElementById('status3');
 const $temp1 = document.getElementById('temp1');
 const $temp2 = document.getElementById('temp2');
 const $incBtn = document.getElementById('incBtn');
@@ -15,18 +17,15 @@ let lock = false;
 
 socket.on('datapkg', function (msg) {
     const receivedData = JSON.parse(msg);
-    let s = (receivedData.status ? 'ON' : 'OFF');
-    if (receivedData.remainingTime > 0) {
-        s += ' ' + receivedData.remainingTime;
-    }
-    $status.innerHTML = s;
+    $status.innerHTML = (receivedData.status ? 'ON' : 'OFF');
+    $status2.innerHTML = receivedData.remainingTime > 0 ? receivedData.remainingTime + ' min' : '';
+    $status3.innerHTML = receivedData.schedule ? 'scheduled' : 'manual';
     $temp1.innerHTML = (receivedData.temp1.toFixed(2));
     $temp2.innerHTML = (receivedData.temp2.toFixed(2));
     $target.innerHTML = (receivedData.target.toFixed(2));
     $toggleBtn.innerHTML = (receivedData.status ? 'Spegni' : 'Accendi');
 
     lock = false;
-    console.log(receivedData);
 });
 
 $toggleBtn.addEventListener('click', _ => {
@@ -47,6 +46,10 @@ $start1h.addEventListener('click', _ => {
 
 $start2h.addEventListener('click', _ => {
     sendCommand({ name: 'start2' });
+})
+
+$status3.addEventListener('click', _ => {
+    sendCommand({ name: 's_toggle' });
 })
 
 function sendCommand(cmd) {
