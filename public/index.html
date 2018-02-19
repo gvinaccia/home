@@ -15,14 +15,16 @@
 <body>
 
 	<header>
-		<h1>Stato caldaia: <strong id="status">...</strong></h1>
+		<h1>Stato caldaia:
+			<strong id="status">...</strong>
+		</h1>
 	</header>
 	<section class="main">
 		<div class="row">
 			<button id="decrBtn">-</button>
 
 			<div id="target" class="display">...</div>
-			
+
 			<button id="incBtn">+</button>
 		</div>
 		<div class="row">
@@ -38,12 +40,22 @@
 		<div class="row">
 			<button id="toggle">...</button>
 		</div>
+
+		<div class="row">
+			<button id="start1">Avvia 1h</button>
+		</div>
+		<div class="row">
+			<button id="start2">Avvia 2h</button>
+		</div>
+		<div class="row">
+			<button id="stopAll">STOP</button>
+		</div>
 	</section>
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/app.js">
-  
-</script>
+
+	</script>
 </body>
 
 </html>

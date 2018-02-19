@@ -15,6 +15,8 @@ const shouldSchedule = false;
 
 const history = new Queue(2000);
 
+let remainingTime = 0;
+
 var lastData = {};
 
 const logger = new winston.Logger({
@@ -26,13 +28,12 @@ const logger = new winston.Logger({
 
 const arduino = new Arduino(logger);
 
-arduino.on('error', (err) => {
-  console.log(err);
-})
+arduino.on('error', console.log);
 
 arduino.on('data', (data) => {
   try {
     lastData = JSON.parse(data);
+    data.remainingTime = remainingTime;
     io.emit('datapkg', data);
   } catch (e) { }
 })
@@ -50,15 +51,6 @@ if (shouldSchedule) {
   cron.schedule('45 7 * * *', () => {
     arduino.turnOff();
   });
-/*
-  cron.schedule('0 18 * * *', () => {
-    arduino.turnOn();
-  });
-
-  cron.schedule('30 19 * * *', () => {
-    arduino.turnOff();
-  });
-  */
 
 }
 
@@ -66,6 +58,9 @@ cron.schedule('*/5 * * * *', () => {
   logger.log('info', 'data', lastData);
 })
 
+var timeout;
+var timeoutRef;
+var intervalRef;
 
 io.on('connection', function (socket) {
   socket.on('command', function (command) {
@@ -83,9 +78,40 @@ io.on('connection', function (socket) {
       case 'decr':
         arduino.setTargetTemp(lastData.target - .5);
         break;
+      case 'start1':
+        startCycle(60);
+        break;
+      case 'start2':
+        startCycle(120);
+        break;
+      case 'stopAll':
+        stopCycle();
+        break;
     }
   });
 });
+
+function startCycle(time) {
+  stopCycle();
+  arduino.turnOn();
+  remainingTime = time;
+  intervalRef = setInterval(() => {
+    remainingTime -= 1;
+  }, 60 * 1000);
+  timeoutRef = setTimeout(() => {
+    stopCycle();
+  }, time * 60 * 1000) 
+}
+
+function stopCycle() {
+  if (! timeoutRef) {
+    return;
+  }
+
+  clearTimeout(timeoutRef);
+  clearInterval(intervalRef);
+  arduino.turnOff();
+}
 
 http.listen(3000, "0.0.0.0", function () {
   console.log('listening on *:3000');
