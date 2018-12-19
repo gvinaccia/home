@@ -4,19 +4,12 @@ const cron = require('node-cron');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const Queue = require("./queue");
-const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database('app.db');
-const Arduino = require('./src/arduino');
 const winston = require('winston');
 
+const Arduino = require('./src/arduino');
 
 let shouldSchedule = false;
-
-const history = new Queue(2000);
-
 let remainingTime = 0;
-
 var lastData = {};
 
 const logger = new winston.Logger({
