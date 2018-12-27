@@ -37,14 +37,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _boiler_manager_boiler_manager_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./boiler-manager/boiler-manager.component */ "./src/app/boiler-manager/boiler-manager.component.ts");
+/* harmony import */ var _gate_manager_gate_manager_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./gate-manager/gate-manager.component */ "./src/app/gate-manager/gate-manager.component.ts");
+
 
 
 
 
 var routes = [
     {
-        path: '',
+        path: 'boiler',
         component: _boiler_manager_boiler_manager_component__WEBPACK_IMPORTED_MODULE_3__["BoilerManagerComponent"]
+    },
+    {
+        path: 'gate',
+        component: _gate_manager_gate_manager_component__WEBPACK_IMPORTED_MODULE_4__["GateManagerComponent"]
+    },
+    {
+        path: '',
+        redirectTo: 'boiler',
+        pathMatch: 'full',
     }
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -70,7 +81,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<router-outlet></router-outlet>\n"
+module.exports = "<nav mat-tab-nav-bar>\n  <a mat-tab-link\n     *ngFor=\"let link of navLinks\"\n     [routerLink]=\"link.path\"\n     routerLinkActive #rla=\"routerLinkActive\"\n     [active]=\"rla.isActive\">\n    {{link.label}}\n  </a>\n</nav>\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -101,7 +112,16 @@ __webpack_require__.r(__webpack_exports__);
 
 var AppComponent = /** @class */ (function () {
     function AppComponent() {
-        this.title = 'homeCtl';
+        this.navLinks = [
+            {
+                path: 'boiler',
+                label: 'CALDAIA'
+            },
+            {
+                path: 'gate',
+                label: 'CANCELLO'
+            }
+        ];
     }
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -138,6 +158,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _boiler_manager_boiler_manager_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./boiler-manager/boiler-manager.component */ "./src/app/boiler-manager/boiler-manager.component.ts");
 /* harmony import */ var _angular_service_worker__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/service-worker */ "./node_modules/@angular/service-worker/fesm5/service-worker.js");
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _gate_manager_gate_manager_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./gate-manager/gate-manager.component */ "./src/app/gate-manager/gate-manager.component.ts");
+
 
 
 
@@ -157,6 +179,7 @@ var AppModule = /** @class */ (function () {
             declarations: [
                 _app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"],
                 _boiler_manager_boiler_manager_component__WEBPACK_IMPORTED_MODULE_8__["BoilerManagerComponent"],
+                _gate_manager_gate_manager_component__WEBPACK_IMPORTED_MODULE_11__["GateManagerComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -391,6 +414,63 @@ var BoilerService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/gate-manager/gate-manager.component.html":
+/*!**********************************************************!*\
+  !*** ./src/app/gate-manager/gate-manager.component.html ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<!--\n<video [attr.src]=\"streamSrc\"></video>\n-->\n\n<h1 class=\"text-center\">Prossimamente</h1>\n"
+
+/***/ }),
+
+/***/ "./src/app/gate-manager/gate-manager.component.scss":
+/*!**********************************************************!*\
+  !*** ./src/app/gate-manager/gate-manager.component.scss ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2dhdGUtbWFuYWdlci9nYXRlLW1hbmFnZXIuY29tcG9uZW50LnNjc3MifQ== */"
+
+/***/ }),
+
+/***/ "./src/app/gate-manager/gate-manager.component.ts":
+/*!********************************************************!*\
+  !*** ./src/app/gate-manager/gate-manager.component.ts ***!
+  \********************************************************/
+/*! exports provided: GateManagerComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GateManagerComponent", function() { return GateManagerComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var GateManagerComponent = /** @class */ (function () {
+    // streamSrc = 'rtsp://192.168.1.105:554/user=admin&password=&channel=3&stream=0.sdp?real_stream--rtp-caching=100';
+    function GateManagerComponent() {
+    }
+    GateManagerComponent.prototype.ngOnInit = function () {
+    };
+    GateManagerComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-gate-manager',
+            template: __webpack_require__(/*! ./gate-manager.component.html */ "./src/app/gate-manager/gate-manager.component.html"),
+            styles: [__webpack_require__(/*! ./gate-manager.component.scss */ "./src/app/gate-manager/gate-manager.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], GateManagerComponent);
+    return GateManagerComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/material/material.module.ts":
 /*!*********************************************!*\
   !*** ./src/app/material/material.module.ts ***!
@@ -412,6 +492,7 @@ var components = [
     _angular_material__WEBPACK_IMPORTED_MODULE_2__["MatButtonModule"],
     _angular_material__WEBPACK_IMPORTED_MODULE_2__["MatIconModule"],
     _angular_material__WEBPACK_IMPORTED_MODULE_2__["MatDividerModule"],
+    _angular_material__WEBPACK_IMPORTED_MODULE_2__["MatTabsModule"],
 ];
 var MaterialModule = /** @class */ (function () {
     function MaterialModule() {
