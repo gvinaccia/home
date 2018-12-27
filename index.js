@@ -84,6 +84,19 @@ io.on('connection', function (socket) {
         shouldSchedule = !shouldSchedule;
         break;
     }
+
+    switch (command.type) {
+      case 'turn_on':
+        if (command.payload.minutes) {
+          startCycle(command.payload.minutes);
+        } else {
+          arduino.turnOn();
+        }
+        break;
+      case 'turn_off':
+        stopCycle();
+        break;
+    }
   });
 });
 
