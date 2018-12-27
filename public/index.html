@@ -1,64 +1,19 @@
-<!DOCTYPE html>
-<html lang="it_IT">
-
+<!doctype html>
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>
-	<meta name='theme-color' content='#2196F3'>
-	<link rel='manifest' href='manifest.json'>
-	<link rel="icon" sizes="177x172" href="/images/touch/Airhorner_192.png">
-	<link rel="apple-touch-icon" href="/images/touch/Airhorner_192.png">
-	<link rel="stylesheet" href="/main.css">
+  <meta charset="utf-8">
+  <title>HomeCtl</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1976d2">
 </head>
-
-<body>
-
-	<header>
-		<h1>Stato caldaia:
-			<strong id="status">...</strong>
-		</h1>
-		<h4>
-			<strong id="status2">...</strong>
-		</h4>
-		<h5>
-			<strong id="status3">...</strong>
-		</h5>
-	</header>
-	<section class="main">
-		<div class="row" style="display: none;">
-			<button id="decrBtn">-</button>
-
-			<div id="target" class="display">...</div>
-
-			<button id="incBtn">+</button>
-		</div>
-		<div class="row">
-			<div class="col">
-				<div class="label">Sensore 1</div>
-				<div class="display-sm" id="temp1">...</div>
-			</div>
-			<div class="col">
-				<div class="label">Sensore 2</div>
-				<div class="display-sm" id="temp2">...</div>
-			</div>
-		</div>
-		<div class="row">
-			<button id="toggle">...</button>
-		</div>
-
-		<div class="row">
-			<button id="start1">Avvia 1h</button>
-		</div>
-		<div class="row">
-			<button id="start2">Avvia 2h</button>
-		</div>
-	</section>
-
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="/app.js">
-
-	</script>
-</body>
-
+<body class="mat-typography">
+  <app-root></app-root>
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
+<script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="polyfills.js"></script><script type="text/javascript" src="styles.js"></script><script type="text/javascript" src="vendor.js"></script><script type="text/javascript" src="main.js"></script></body>
 </html>
