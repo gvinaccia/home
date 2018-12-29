@@ -5,8 +5,10 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const winston = require('winston');
+const fs = require('fs');
 
 const Arduino = require('./src/arduino');
+const streamer = require('./src/streamer');
 
 let shouldSchedule = false;
 let remainingTime = 0;
@@ -55,7 +57,31 @@ var timeout;
 var timeoutRef;
 var intervalRef;
 
+var clientCount = 0;
+var p;
+
+function incrementClients() {
+  clientCount++;
+  if (p === undefined) {
+    p = streamer();
+  }
+}
+
+function decrementClients() {
+  clientCount--;
+  if (clientCount === 0 && p) {
+    p.kill();
+    p = undefined;
+  }
+}
+
 io.on('connection', function (socket) {
+  incrementClients();
+
+  socket.on('disconnect', () => {
+    decrementClients();
+  });
+
   socket.on('command', function (command) {
     switch (command.name) {
       case 'toggle':
@@ -95,6 +121,18 @@ io.on('connection', function (socket) {
         break;
       case 'turn_off':
         stopCycle();
+        break;
+      case 'getcam':
+        fs.readFile('/tmp/_imgsnap.jpg',
+          function (err, content) {
+            if (err) {
+              throw err;
+            } else {
+              socket.volatile.emit('cam1', {
+                data: content.toString('base64')
+              });
+            }
+          });
         break;
     }
   });
