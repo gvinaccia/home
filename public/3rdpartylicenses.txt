@@ -792,6 +792,15 @@ THE SOFTWARE.
 
 @angular/material/divider
 
+@angular/forms
+MIT
+
+@angular/material/core
+
+@angular/material/list
+
+@angular/material/slide-toggle
+
 @angular/material/tabs
 
 @angular/service-worker

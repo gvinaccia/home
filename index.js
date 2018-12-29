@@ -57,31 +57,9 @@ var timeout;
 var timeoutRef;
 var intervalRef;
 
-var clientCount = 0;
-var p;
-
-function incrementClients() {
-  clientCount++;
-  if (p === undefined) {
-    p = streamer();
-  }
-}
-
-function decrementClients() {
-  clientCount--;
-  if (clientCount === 0 && p) {
-    p.kill();
-    p = undefined;
-  }
-}
+streamer();
 
 io.on('connection', function (socket) {
-  incrementClients();
-
-  socket.on('disconnect', () => {
-    decrementClients();
-  });
-
   socket.on('command', function (command) {
     switch (command.name) {
       case 'toggle':
