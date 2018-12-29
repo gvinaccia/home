@@ -7,7 +7,7 @@ const extraparams = '-b:v 32k';
 
 module.exports = function start() {
     return exec(
-        'ffmpeg -loglevel quiet -i \'' + input + '\' -r ' + rate + ' ' + extraparams + ' -f image2 -updatefirst 1 /tmp/_imgsnap.jpg',
+        'ffmpeg -loglevel quiet -y -i \'' + input + '\' -r ' + rate + ' ' + extraparams + ' -f image2 -update 1 /tmp/_imgsnap.jpg',
         { maxBuffer: 2048 * 1024 },
         function (error, stdout, stderr) {
             if (error !== null) {
