@@ -104,7 +104,6 @@ io.on('connection', function (socket) {
         fs.readFile('/tmp/_imgsnap.jpg',
           function (err, content) {
             if (err) {
-              throw err;
             } else {
               socket.volatile.emit('cam1', {
                 data: content.toString('base64')
