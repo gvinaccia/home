@@ -9,6 +9,7 @@ const fs = require('fs');
 
 const Arduino = require('./src/arduino');
 const streamer = require('./src/streamer');
+const parser = require('./src/parser');
 
 let shouldSchedule = false;
 let remainingTime = 0;
@@ -25,7 +26,7 @@ const arduino = new Arduino(logger);
 
 arduino.on('error', console.log);
 
-arduino.on('data', (data) => {
+arduino.on('data', data => {
   try {
     lastData = JSON.parse(data);
     const d = JSON.parse(data);
@@ -33,7 +34,7 @@ arduino.on('data', (data) => {
     d.schedule = shouldSchedule;
     io.emit('datapkg', JSON.stringify(d));
   } catch (e) { }
-})
+});
 
 arduino.connect();
 
@@ -53,13 +54,15 @@ cron.schedule('*/5 * * * *', () => {
   logger.log('info', 'data', lastData);
 })
 
-var timeout;
 var timeoutRef;
 var intervalRef;
 
-streamer();
+var pstream;
 
 io.on('connection', function (socket) {
+  if (pstream == undefined) {
+    pstream = streamer();
+  }
   socket.on('command', function (command) {
     switch (command.name) {
       case 'toggle':
@@ -111,6 +114,9 @@ io.on('connection', function (socket) {
             }
           });
         break;
+      case 'boiler_stats':
+        parser().then(data => socket.emit('boiler_stats_response', data));
+        break;
     }
   });
 });
@@ -119,12 +125,8 @@ function startCycle(time) {
   stopCycle();
   arduino.turnOn();
   remainingTime = time;
-  intervalRef = setInterval(() => {
-    remainingTime -= 1;
-  }, 60 * 1000);
-  timeoutRef = setTimeout(() => {
-    stopCycle();
-  }, time * 60 * 1000)
+  intervalRef = setInterval(() => remainingTime -= 1, 60 * 1000);
+  timeoutRef = setTimeout(() => stopCycle(), time * 60 * 1000);
 }
 
 function stopCycle() {
@@ -139,6 +141,4 @@ function stopCycle() {
   remainingTime = 0;
 }
 
-http.listen(3000, "0.0.0.0", function () {
-  console.log('listening on *:3000');
-});
+http.listen(3000, "0.0.0.0", () => console.log('listening on *:3000'));
