@@ -7,7 +7,7 @@ function getRefills() {
   return new Promise(resolve => {
     fs.readFile(logfile, 'utf-8', (err, data) => {
       if (err) {
-        resolve([]);
+        return resolve([]);
       }
       resolve(JSON.parse(data));
     })
@@ -24,7 +24,7 @@ function addRefill(date, quantity, remaining) {
 
     fs.writeFile(logfile, JSON.stringify(allRefills), { encoding: 'utf-8' }, err => {
       if (err) {
-        reject(err);
+        return reject(err);
       }
       resolve(allRefills);
     });

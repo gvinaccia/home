@@ -125,7 +125,7 @@ io.on('connection', function (socket) {
         thank.addRefill(
           command.payload.date,
           command.payload.quantity,
-          command.payload.remaining,
+          command.payload.remaining
         ).then(data => socket.emit('thank_refills', data));
         break;
     }
