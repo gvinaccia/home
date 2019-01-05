@@ -18,16 +18,17 @@ function addRefill(date, quantity, remaining) {
   return new Promise((resolve, reject) => {
     const refill = { date, quantity, remaining };
 
-    const allRefills = getRefills();
+    getRefills().then(allRefills => {
+      allRefills.push(refill);
 
-    allRefills.push(refill);
-
-    fs.writeFile(logfile, JSON.stringify(allRefills), { encoding: 'utf-8' }, err => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(allRefills);
+      fs.writeFile(logfile, JSON.stringify(allRefills), { encoding: 'utf-8' }, err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(allRefills);
+      });  
     });
+
   });
 }
 
