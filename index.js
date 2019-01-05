@@ -10,6 +10,7 @@ const fs = require('fs');
 const Arduino = require('./src/arduino');
 const streamer = require('./src/streamer');
 const parser = require('./src/parser');
+const thank = require('./src/thank');
 
 let shouldSchedule = false;
 let remainingTime = 0;
@@ -116,6 +117,16 @@ io.on('connection', function (socket) {
         break;
       case 'boiler_stats':
         parser().then(data => socket.emit('boiler_stats_response', data));
+        break;
+      case 'get_thank_refills':
+        thank.getRefills().then(data => socket.emit('thank_refills', data));
+        break;
+      case 'add_thank_refill':
+        thank.addRefill(
+          command.payload.date,
+          command.payload.quantity,
+          command.payload.remaining,
+        ).then(data => socket.emit('thank_refills', data));
         break;
     }
   });
