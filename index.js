@@ -128,6 +128,10 @@ io.on('connection', function (socket) {
           command.payload.remaining
         ).then(data => socket.emit('thank_refills', data));
         break;
+      case 'remove_thank_refill':
+        thank.removeRefill(command.payload.id)
+          .then(data => socket.emit('thank_refills', data));
+          break;
     }
   });
 });
