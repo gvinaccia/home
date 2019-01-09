@@ -37,7 +37,7 @@ function removeRefill(id) {
     getRefills().then(allRefills => {
       const refillsToSave = allRefills.filter(r => r.id != id);
       
-      fs.writeFile(logfile, JSON.stringify(allRefills), { encoding: 'utf-8' }, err => {
+      fs.writeFile(logfile, JSON.stringify(refillsToSave), { encoding: 'utf-8' }, err => {
         if (err) {
           return reject(err);
         }
