@@ -134,6 +134,9 @@ io.on('connection', function (socket) {
         thank.removeRefill(command.payload.id)
           .then(data => socket.emit('thank_refills', data));
           break;
+      case 'open_gate':
+        arduino.openGate();
+        break;
     }
   });
 });
