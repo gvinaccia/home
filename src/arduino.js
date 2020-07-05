@@ -1,73 +1,54 @@
 const EventEmitter = require('events');
-const SerialPort = require('serialport');
+
+const Gpio = require('onoff').Gpio;
 
 class Arduino extends EventEmitter {
-  constructor(logger, baudRate = 57600) {
+  constructor(logger) {
     super();
     
-    this.baudRate = baudRate;
-    this.isConnected = false;
     this.logger = logger;
+    this.relay = new Gpio(17, 'out');
+    this.gate  = new Gpio(27, 'out');
+
+    process.on('SIGINT', _ => {
+      this.relay.unexport();
+    });
   }
-  
+
   connect() {
-    SerialPort.list((err, ports) => {
-      let portName;
-      ports.forEach(port => {
-        if (port.manufacturer == 'FTDI')
-        portName = port.comName;
-      })
-      
-      if (portName == null) {
-        this.emit('error', "Arduino non trovato");
-        return;
-      }
-      
-      this.port = new SerialPort(portName, {
-        baudRate: this.baudRate,
-        parser: SerialPort.parsers.readline('\n')
-      });
-      
-      this.port.on('open', () => {
-        this.isConnected = true;
-        this.logger.log('info', 'connect');
-      });
-      
-      this.port.on('data', data => {
-        this.emit('data', data);
-      });
-    })
+    setInterval(() => {
+      this.emit('data', JSON.stringify({
+        temp1: 20.0,
+        temp2: 20.0,
+        status: this.relay.readSync(),
+        target: 22,
+        message: "data",
+      }));
+    }, 1000);
   }
-  
+
   toggle() {
     this.logger.log('info', 'toggling');
-    this.sendCommand('t');
+    this.relay.writeSync(this.relay.readSync()^1);
   }
   
   turnOn() {
     this.logger.log('info', 'turn-on');
-    this.sendCommand('s');
+    this.relay.writeSync(1);
   }
   
   turnOff() {
     this.logger.log('info', 'turn-off');
-    this.sendCommand('o');
+    this.relay.writeSync(0);
   }
   
-  setTargetTemp(temp) {
-    this.sendCommand('a' + temp);
-  }
+  setTargetTemp(temp) {}
 
   openGate() {
-    this.logger.log('info', 'open-gate');
-    this.sendCommand('g');
-  }
-  
-  sendCommand(cmd) {
-    if (!this.isConnected)
-    return;
-    
-    this.port.write(cmd);
+    this.gate.writeSync(1);
+    setTimeout(() => {
+      this.gate.writeSync(0);
+    }, 500);
   }
 }
 

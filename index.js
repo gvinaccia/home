@@ -34,7 +34,9 @@ arduino.on('data', data => {
     d.remainingTime = remainingTime;
     d.schedule = shouldSchedule;
     io.emit('datapkg', JSON.stringify(d));
-  } catch (e) { }
+  } catch (e) { 
+    console.error(e);
+  }
 });
 
 arduino.connect();
